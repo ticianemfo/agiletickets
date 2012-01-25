@@ -6,7 +6,7 @@ import org.junit.Test;
 
 public class SessaoTest {
 
-	private Sessao sessao;
+	private static Sessao sessao;
 	
 	@Before
 	public void inicializar(){

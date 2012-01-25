@@ -46,6 +46,13 @@ public class EspetaculosController {
 
 	@Post @Path("/espetaculos")
 	public void adiciona(Espetaculo espetaculo) {
+		validaNovoEspetaculo(espetaculo);
+
+		agenda.cadastra(espetaculo);
+		result.redirectTo(this).lista();
+	}
+
+	private void validaNovoEspetaculo(Espetaculo espetaculo) {
 		if (Strings.isNullOrEmpty(espetaculo.getNome())) {
 			validator.add(new ValidationMessage("Nome do espetáculo não pode estar em branco", ""));
 		}
@@ -53,9 +60,6 @@ public class EspetaculosController {
 			validator.add(new ValidationMessage("Descrição do espetáculo não pode estar em branco", ""));
 		}
 		validator.onErrorRedirectTo(this).lista();
-
-		agenda.cadastra(espetaculo);
-		result.redirectTo(this).lista();
 	}
 
 
@@ -77,6 +81,15 @@ public class EspetaculosController {
 			return;
 		}
 
+		validaReserva(quantidade, sessao);
+
+		sessao.reserva(quantidade);
+		result.include("message", "Sessao reservada com sucesso");
+
+		result.redirectTo(IndexController.class).index();
+	}
+
+	private void validaReserva(final Integer quantidade, Sessao sessao) {
 		if (quantidade < 1) {
 			validator.add(new ValidationMessage("Você deve escolher um lugar ou mais", ""));
 		}
@@ -86,11 +99,6 @@ public class EspetaculosController {
 		}
 
 		validator.onErrorRedirectTo(this).sessao(sessao.getId());
-
-		sessao.reserva(quantidade);
-		result.include("message", "Sessao reservada com sucesso");
-
-		result.redirectTo(IndexController.class).index();
 	}
 
 	@Get @Path("/espetaculo/{espetaculoId}/sessoes")
