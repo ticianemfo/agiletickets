@@ -83,25 +83,32 @@ public class Espetaculo {
 
 	public List<Sessao> criaSessoes(LocalDate inicio, LocalDate fim, LocalTime horario, Periodicidade periodicidade) {
 		
-//		int intervalo = Days.daysBetween(inicio, fim).getDays();
-
-	//	Sessao sessao;
-		//for (int i=0; i<intervalo; i++){
-			//sess
-//		}
-	//	}
-//		if (intervalo == 1)
-//			S
-//			sessoes.add(sessaoNova);
-//		
-//		
-//		return null;
+		int intervalo = Days.daysBetween(inicio, fim).getDays();
 		
-		Sessao sessao = new Sessao();
-		sessao.setInicio(inicio.toDateTime(horario));
-		
+		Sessao sessao;
 		ArrayList<Sessao> lista = new ArrayList<Sessao>();
-		lista.add(sessao);
+		if (intervalo == 0){
+			sessao = new Sessao();
+			sessao.setInicio(inicio.toDateTime(horario));
+			lista.add(sessao);
+			return lista;
+		}
+		//Fazer do while
+				
+		
+		for (int i=0; i<=intervalo; i++){
+			sessao = new Sessao();
+			if (periodicidade == Periodicidade.DIARIA)
+			{
+				sessao.setInicio(inicio.plusDays(i).toDateTime(horario));
+			}
+			else
+			{
+				sessao.setInicio(inicio.plusDays(i).toDateTime(horario));//mudar aqui	
+			}
+			lista.add(sessao);									
+		}
+		
 		return lista;
 		
 	}
